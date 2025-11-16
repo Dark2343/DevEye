@@ -34,16 +34,42 @@ app.post('/upload', upload.single('file'), async (req, res) => {
         const result = await client.chatCompletion({
             model: process.env.HF_MODEL,
             messages: [
-                {role: 'system', content: 'You are DevEye, a Senior code reviewer. Respond in raw JSON only, without any markdown code blocks.'},
-                {role: 'user', content: 
-                    `Review this code file ${req.file.originalname}, and list any issues found within it,
-                    Code:
-                    \`\`\`
-                    ${code}
-                    \`\`\`
-                    `
-                }
-            ],
+                {
+                    role: "system",
+                    content: `
+                        You are DevEye, a senior-level code reviewer. 
+                        Your job is to analyze the provided code and return only valid JSON. 
+                        Do NOT include markdown, explanations, code blocks, text outside JSON, or commentary. 
+                        Respond with a JSON array of objects. 
+                        Each object must have the following EXACT keys:
+
+                        - "line": number
+                        - "issue": string
+                        - "severity": "low" | "medium" | "high"
+                        - "description": string
+                        - "fix": string   // A clear and concise suggestion on how to fix the issue
+
+                        If there are no issues, return a JSON array with EXACTLY one object:
+                        [
+                            {
+                                "message": "No issues found. Code looks clean and well-written."
+                            }
+                        ]
+
+                        Output must be strictly valid JSON.`
+                },
+                {
+                    role: "user",
+                    content: `
+                        Analyze this code file: ${req.file.originalname}
+
+                        Return the issues in strict JSON only.
+
+                        Code:
+                        ${code}
+                        `
+                            }
+                        ],
             // Limits the number of tokens(words) the model can respond with
             // Temperature determines how creative the model can be
             parameters: {max_new_tokens: 512, temperature: 0},
