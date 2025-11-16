@@ -4,6 +4,7 @@ import api from "../services/api";
 export default function Home() {
     
     // UseState() returns an array containing a variable, and a function that can edit that variable's value
+    const [output, setOutput] = useState('')
     const [file, setFile] = useState(null)
 
     const handleSubmission = async () => {
