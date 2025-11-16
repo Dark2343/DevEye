@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import Home from '../pages/home'
 
 function App() {
 
   return (
     <>
-      <input type='file' />
+      <Home />
     </>
   )
 }
