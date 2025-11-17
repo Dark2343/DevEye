@@ -34,8 +34,8 @@ async function callModel(code){
                         Each object must have the following EXACT keys:
 
                         - "line": number
-                        - "issue": string
-                        - "severity": "low" | "medium" | "high"
+                        - "issue": string // just the issue without extra emphasis like "Critical:"
+                        - "severity": "Low" | "Medium" | "High"
                         - "description": string
                         - "fix": string   // A clear and concise suggestion on how to fix the issue
 
