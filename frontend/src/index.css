@@ -7,7 +7,6 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -16,13 +15,6 @@
 }
 
 html, body {
-  margin: 0;
-  height: 100%;
+  @apply bg-gray-950;
+  height: 100;
 }
-
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-

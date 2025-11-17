@@ -17,21 +17,11 @@ app.use(cors())
 // To automatically parse any incoming JSON
 app.use(express.json())
 
-// Root page
-app.get('/', (req, res) => {
-    res.send('<h1>Hello from your Express server!</h1>');
-});
 
-// The most important call
 // Calls the API model to review the code
-app.post('/upload', upload.single('file'), async (req, res) => {
-    // Turn the stored raw file into text
-    const code = req.file.buffer.toString('utf-8');
-
-    try{
-        // Specify the model's prompts and settings
-        // TODO: Specify exactly to the model the structure of JSON it should respond in
-        const result = await client.chatCompletion({
+async function callModel(code){
+    // Specify the model's prompts and settings
+    const result = await client.chatCompletion({
             model: process.env.HF_MODEL,
             messages: [
                 {
@@ -61,7 +51,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
                 {
                     role: "user",
                     content: `
-                        Analyze this code file: ${req.file.originalname}
+                        Analyze this code
 
                         Return the issues in strict JSON only.
 
@@ -75,18 +65,31 @@ app.post('/upload', upload.single('file'), async (req, res) => {
             parameters: {max_new_tokens: 512, temperature: 0},
         })
 
-        // Clean the model's response to output it as JSON
-        let output = result.choices[0].message.content;
-        output = output.replace(/^```json\s*/, "").replace(/```$/, "");
-        output = JSON.parse(output)
+    // Clean the model's response to output it as JSON
+    let output = result.choices[0].message.content;
+    output = output.replace(/^```json\s*/, "").replace(/```$/, "");
+    output = JSON.parse(output)
 
-        // Send it back to the front
-        res.json({modelOutput: output})
-    }
-    catch(e){
-        console.error(e);
-        res.status(500).json({error: "Model call failed"})
-    }
+    return output;
+}
+
+app.post('/upload', async (req, res) => {
+    // req.body-- stores JSON into variable
+    // req.body.code -- stores pure text into variable
+    const code = req.body.codeToReview
+
+    // try{
+    //     // Calling the model with the received code
+    //     const review = callModel(code)
+
+    //     // Send the review to the frontend
+    //     res.json({modelOutput: review})
+    // }
+    // catch(e){
+    //     // Return an error on failure
+    //     console.error(e);
+    //     res.status(500).json({error: "Model call failed"})
+    // }
 });
 
 // Starting the server on designated port
