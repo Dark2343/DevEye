@@ -34,8 +34,8 @@ async function callModel(code){
                         - "line": number
                         - "issue": string // just the issue without extra emphasis like "Critical:"
                         - "severity": "Low" | "Medium" | "High"
-                        - "description": string
-                        - "fix": string   // A clear and concise suggestion on how to fix the issue
+                        - "description": string     // A clear and concise explanation of the problem 
+                        - "fix": string   // A clear and concise suggestion on how to fix the issue without code, just explanation
 
                         If there are no issues, return a JSON array with EXACTLY one object:
                         [
@@ -44,7 +44,7 @@ async function callModel(code){
                             }
                         ]
 
-                        Output must be strictly valid JSON.`
+                        Respond **strictly in JSON only**, no code blocks, no explanations, no markdown, no backticks.`
                 },
                 {
                     role: "user",
@@ -65,7 +65,7 @@ async function callModel(code){
 
     // Clean the model's response to output it as JSON
     let output = result.choices[0].message.content;
-    output = output.replace(/^```json\s*/, "").replace(/```$/, "");
+    output = output.replace(/^```json\s*/, "").replace(/```$/, "").trim();
     
     try {
         output = JSON.parse(output)
