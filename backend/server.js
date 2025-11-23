@@ -1,7 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const multer = require('multer');
-const upload = multer({ storage: multer.memoryStorage() });
 const app = express()
 const { InferenceClient } = require('@huggingface/inference')
 
@@ -68,7 +66,13 @@ async function callModel(code){
     // Clean the model's response to output it as JSON
     let output = result.choices[0].message.content;
     output = output.replace(/^```json\s*/, "").replace(/```$/, "");
-    output = JSON.parse(output)
+    
+    try {
+        output = JSON.parse(output)
+    } catch (err) {
+        console.error("JSON Parse Error:", output)
+        throw new Error("Invalid model output")
+    }
 
     return output;
 }
@@ -77,19 +81,18 @@ app.post('/upload', async (req, res) => {
     // req.body-- stores JSON into variable
     // req.body.code -- stores pure text into variable
     const code = req.body.codeToReview
+    try{
+        // Calling the model with the received code
+        const review = await callModel(code)
 
-    // try{
-    //     // Calling the model with the received code
-    //     const review = callModel(code)
-
-    //     // Send the review to the frontend
-    //     res.json({modelOutput: review})
-    // }
-    // catch(e){
-    //     // Return an error on failure
-    //     console.error(e);
-    //     res.status(500).json({error: "Model call failed"})
-    // }
+        // Send the review to the frontend
+        res.json({modelOutput: review})
+    }
+    catch(e){
+        // Return an error on failure
+        console.error(e);
+        res.status(500).json({error: "Model call failed"})
+    }
 });
 
 // Starting the server on designated port
