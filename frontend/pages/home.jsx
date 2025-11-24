@@ -42,6 +42,9 @@ export default function Home() {
     
     return(
         <div className="flex flex-col w-full ">
+            <div className="text-white font-bold text-3xl mb-3 py-3 border-b-3 border-gray-600 text-center">
+                👁️ Dev Eye
+            </div>
             <div className="flex">
                 <div className="flex-2 m-4 rounded-2xl overflow-hidden">
                     <Editor height="80vh" theme="vs-dark" 
@@ -56,9 +59,9 @@ export default function Home() {
                     <ul className="m-4">
                         {modelResponse ? modelResponse.modelOutput.map((item, index) => (   // Must have the same names as in the JSON
                             <li key={index} className={`${
-                                item.severity == 'Low' ? "bg-sky-800" :
-                                item.severity == 'Medium' ? "bg-yellow-600" :
-                                "bg-red-800"
+                                item.severity == 'Low' ? "border-l-7  border-sky-600 bg-gray-800" :
+                                item.severity == 'Medium' ? "border-l-7  border-yellow-500 bg-gray-800" :
+                                "border-l-7 border-red-600 bg-gray-800 "
                             } py-3 px-4 my-4 rounded-lg`}>
                             <div className="flex justify-between">
                                 <span className="text-left font-bold border-b-2 mb-3">{item.issue} <b><i>[Ln {item.line}]</i></b></span>
@@ -79,7 +82,7 @@ export default function Home() {
                 </div>
             </div>
             <div>
-                <input type='file' onChange={handleFileInput} className="file:bg-blue-500 file:text-white file:px-4 file:py-2 file:rounded-md hover:file:bg-blue-600 m-4"/>
+                <input type='file' onChange={handleFileInput} className="file:bg-gray-700 file:text-white file:px-4 file:py-2 file:rounded-md hover:file:bg-gray-800 m-4 border-2 border-gray-700 rounded-lg hover:border-gray-800 "/>
                 <button type='button' onClick={handleSubmission} disabled={!code || loading} className={`text-white px-5 py-2 rounded-md 
                     ${(code && !loading) ? "bg-green-500 hover:bg-green-600" : "bg-green-900 cursor-not-allowed"} `}>{loading ? "Processing..." : "Submit"}</button>
             </div>
