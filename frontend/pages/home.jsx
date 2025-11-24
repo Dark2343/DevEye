@@ -2,13 +2,14 @@ import { useState } from "react";
 import api from "../services/api";
 import Editor from "@monaco-editor/react"
 import { getCodingLanguages } from "../data/codeLanguages";
+import { severityColors } from "../data/severityColors";
 
 export default function Home() {
     
     // UseState() returns an array containing a variable, and a function that can edit that variable's value
     const [code, setCode] = useState('')
     const [loading, setLoading] = useState(false)
-    const [modelResponse, setModelResponse] = useState('')
+    const [modelOutput,setModelOutput] = useState('')
     const [codeLanguage, setCodeLanguage] = useState('plaintext')
 
     const handleFileInput = (e) => {
@@ -37,12 +38,13 @@ export default function Home() {
         const response = await api.post('/upload', {codeToReview: code})
         setLoading(false)
 
-        setModelResponse(response.data)
+        setModelOutput(response.data.modelOutput)
     };
     
+    // TODO: Implement error handling
     return(
         <div className="flex flex-col w-full ">
-            <div className="text-white font-bold text-3xl mb-3 py-3 border-b-3 border-gray-600 text-center">
+            <div className="bg-gray-900 text-white font-bold text-3xl mb-3 py-3 border-b-3 border-gray-600 text-center">
                 👁️ Dev Eye
             </div>
             <div className="flex">
@@ -53,25 +55,23 @@ export default function Home() {
                 </div>
 
                 <div className="flex-1 bg-gray-900 m-4 rounded-lg overflow-y-auto max-h-[80vh]">
-                    <div className="text-white font-bold text-xl px-4 py-2 border-b-2 border-gray-400 text-center">
+                    <div className="text-white font-bold text-xl px-4 py-2 border-b-2 border-gray-400 text-center sticky top-0 bg-gray-900 z-10">
                         Review Results
                     </div>
                     <ul className="m-4">
-                        {modelResponse ? modelResponse.modelOutput.map((item, index) => (   // Must have the same names as in the JSON
-                            <li key={index} className={`${
-                                item.severity == 'Low' ? "border-l-7  border-sky-600 bg-gray-800" :
-                                item.severity == 'Medium' ? "border-l-7  border-yellow-500 bg-gray-800" :
-                                "border-l-7 border-red-600 bg-gray-800 "
-                            } py-3 px-4 my-4 rounded-lg`}>
-                            <div className="flex justify-between">
+                        {modelOutput ? modelOutput.map((item, index) => (   // Must have the same names as in the JSON
+                            <li key={index} className={`border-l-7 ${severityColors[item.severity].border} bg-gray-800 py-3 px-4 my-4 rounded-lg`}>
+                            <div className="flex justify-between items-start">
                                 <span className="text-left font-bold border-b-2 mb-3">{item.issue} <b><i>[Ln {item.line}]</i></b></span>
-                                <span className="text-right"><b>{item.severity}</b></span>
+                                <div className={`${severityColors[item.severity].bg} py-1 px-2 rounded-lg`}>
+                                    <span className="text-right"><b>{item.severity}</b></span>
+                                </div>
                             </div>
-                            <u><b>Description</b></u> <br></br> {item.description}<br></br>
-                            <u><b>Fix</b></u> <br></br> {item.fix}
+                            <b>Description</b> <br></br> {item.description}<br></br>
+                            <b>Fix</b> <br></br> {item.fix}
                             </li>                 
                         )) : loading ?
-                        <div className="flex justify-center items-center my-4">
+                            <div className="flex justify-center items-center my-4">
                                 <div className="w-10 h-10 border-4 border-white-500 border-dashed rounded-full animate-spin"></div>
                             </div>  
                             : <div className="text-center">
