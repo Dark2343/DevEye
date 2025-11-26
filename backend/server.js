@@ -11,6 +11,7 @@ const client = new InferenceClient(process.env.HF_API_KEY);
 // Middleware
 // To allow the frontend to call the backend since they're on different ports
 // TODO: Need to restrict it later to allow only responding to the frontend address
+// TODO: Implement method to allow each IP to send only a specific amount of requests
 app.use(cors())
 // To automatically parse any incoming JSON
 app.use(express.json())

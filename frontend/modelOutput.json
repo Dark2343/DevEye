@@ -15,11 +15,11 @@
             "fix": "Incorporate robust locking mechanisms like mutexes or condition variables to avoid race conditions when interacting with the model."
         },
         {
-            "line": 73,
-            "issue": "Potential for race conditions with model output",
+            "line": 88,
+            "issue": "Unbounded parallel requests to the model",
             "severity": "High",
-            "description": "Lack of mutex or synchronization mechanisms when predicting the model might lead to race conditions resulting in inconsistent responses or incorrect model outputs.",
-            "fix": "Incorporate robust locking mechanisms like mutexes or condition variables to avoid race conditions when interacting with the model."
+            "description": "The system allows unlimited simultaneous model inference requests, which can overwhelm compute resources and cause degraded performance, timeouts, or complete service failure.",
+            "fix": "Implement a request queue or semaphore-based concurrency limit to ensure only a safe number of model inference operations run at the same time."
         }
     ]
 }

@@ -8,8 +8,8 @@ export const severityColors = {
         border: "border-yellow-600"
     },
     High: {
-        bg: "bg-red-600",
-        border: "border-red-600"
+        bg: "bg-red-700",
+        border: "border-red-700"
     }
 }
 
