@@ -3,7 +3,7 @@ import api from "../services/api";
 import Editor from "@monaco-editor/react"
 import { getCodingLanguages } from "../data/codeLanguages";
 import { severityColors } from "../data/severityColors";
-import DATA from "../modelOutput.json";
+import logo from '../assets/DevEye.png'
 
 export default function Home() {
     
@@ -36,19 +36,18 @@ export default function Home() {
         }
 
         setLoading(true)
-        // const response = await api.post('/upload', {codeToReview: code})
+        const response = await api.post('/upload', {codeToReview: code})
         setLoading(false)
 
-        // setModelOutput(response.data.modelOutput)
-        setModelOutput(DATA)
+        setModelOutput(response.data.modelOutput)
     };
     
     // TODO: Implement error handling
     return(
         <div className="flex flex-col w-full ">
             {/* NavBar */}
-            <div className="bg-gray-900 text-white font-bold text-3xl mb-1 py-3 border-b-3 border-gray-600 text-center">
-                👁️ Dev Eye
+            <div className="flex justify-center items-center gap-2 bg-gray-900 text-white font-bold text-3xl mb-1 py-3 border-b-3 border-gray-600 text-center tracking-wide">
+                <img src={logo} width={50}/> <span>Dev Eye</span>
             </div>
             <div className="flex">
                 {/* Monaco Code Editor */}
@@ -66,16 +65,16 @@ export default function Home() {
                     </div>
                     {/* List Items */}
                     <ul className="m-4">
-                        {modelOutput ? DATA.modelOutput.map((item, index) => (   // Must have the same names as in the JSON
+                        {modelOutput ? modelOutput.map((item, index) => (   // Must have the same names as in the JSON
                             /* Border Color */
-                            <li key={index} className={`border-l-8 ${severityColors[item.severity].border} bg-gray-800 py-2 px-4 my-4 rounded-lg`}>
+                            <li key={index} className={`border-l-8 ${severityColors[item.severity].border} bg-gray-800 py-2 px-4 my-4 rounded-lg transition-all hover:scale-[1.01] hover:bg-gray-800/70`}>
                                 {/* Details/Summary is for making cards collapsible */}
                                 <details>
                                     <summary className="flex justify-between items-start">
                                         <div className="p-1 text-left border-gray-400 cursor-pointer list-none">
                                             <span className="font-bold">{item.issue}</span> <span className="font-semibold italic">[Ln {item.line}]</span>
                                         </div>
-                                        <div className={`${severityColors[item.severity].bg} py-1 px-2 rounded-lg font-semibold text-right`}>
+                                        <div className={`${severityColors[item.severity].bg} py-1 px-2 rounded-full font-semibold text-right`}>
                                             {item.severity}
                                         </div>
                                     </summary>
@@ -89,7 +88,7 @@ export default function Home() {
                                         </fieldset>
                                         <fieldset className="border border-gray-400 rounded-xl px-3 py-2">
                                             <legend className="font-semibold px-2">Fix</legend>
-                                            
+
                                             {item.fix}
                                         </fieldset>
                                     </div>
@@ -108,10 +107,10 @@ export default function Home() {
                 </div>
             </div>
             {/* Choosing files / Submitting code */}
-            <div>
-                <input type='file' onChange={handleFileInput} className="file:bg-gray-700 file:text-white file:px-4 file:py-2 file:rounded-md hover:file:bg-gray-800 m-4 border-2 border-gray-700 rounded-lg hover:border-gray-800 "/>
-                <button type='button' onClick={handleSubmission} disabled={!code || loading} className={`text-white px-5 py-2 rounded-md 
-                    ${(code && !loading) ? "bg-green-500 hover:bg-green-600" : "bg-green-900 cursor-not-allowed"} `}>{loading ? "Processing..." : "Submit"}</button>
+            <div className="mx-4">
+                <input type='file' onChange={handleFileInput} className="cursor-pointer file:cursor-pointer file:bg-gray-700 file:text-white file:px-4 file:py-2 file:rounded-md hover:file:bg-gray-800 border-2 border-gray-700 rounded-lg hover:border-gray-800"/>
+                <button type='button' onClick={handleSubmission} disabled={!code || loading} className={`text-white mx-4 px-5 py-2 rounded-md cursor-pointer
+                    ${(code && !loading) ? "bg-emerald-600 hover:bg-emerald-700" : "bg-emerald-900 cursor-not-allowed"} `}>{loading ? "Processing..." : "Submit"}</button>
             </div>
         </div>
     );

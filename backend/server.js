@@ -57,8 +57,8 @@ async function callModel(code){
                         Code:
                         ${code}
                         `
-                            }
-                        ],
+                }
+            ],
             // Limits the number of tokens(words) the model can respond with
             // Temperature determines how creative the model can be
             parameters: {max_new_tokens: 512, temperature: 0},

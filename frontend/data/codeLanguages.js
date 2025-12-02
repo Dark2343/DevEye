@@ -1,6 +1,8 @@
 const languages = {
     "c": "cpp",
+    "h": "cpp",
     "cpp": "cpp",
+    "hpp": "cpp",
     "cs": "csharp",
     "css" : "css",
     "dart" : "dart",
