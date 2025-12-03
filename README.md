@@ -6,7 +6,7 @@ The project uses a HuggingFace AI model with custom prompting logic to enforce z
 - Allows uploading code files, or entering code directly in the editor
 - Returns **strict JSON** output for easy automation.
 - Focuses only on **actual technical issues** (logic, runtime, misuse, broken patterns).
-- Supports multiple languages (JS/TS, React, Node.js, Python, C++, Java, etc.).
+- Supports multiple languages (JS/TS, React, C++, Java, Python, Go, Dart, etc.).
 
 ## Workflow
 1. User uploads a code file **OR** Enters their code in the editor.

@@ -14,6 +14,7 @@ const languages = {
     "jsx": "javascript",
     "kt": "kotlin",
     "ts": "typescript",
+    "tsx": "typescript",
     "md" : "markdown",
     "py": "python",
     "rb": "ruby",

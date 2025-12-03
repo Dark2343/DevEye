@@ -20,6 +20,7 @@ app.use(express.json())
 // Calls the API model to review the code
 async function callModel(code){
     // Specify the model's prompts and settings
+    // TODO: Improve the prompt and no problems output
     const result = await client.chatCompletion({
             model: process.env.HF_MODEL,
             messages: [
