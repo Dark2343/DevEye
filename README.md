@@ -1,4 +1,4 @@
-[Logo](frontend/assets/DevEye.png)# DevEye - AI-Powered Code Reviewer
+[Logo](./frontend/assets/DevEye.png) # DevEye - AI-Powered Code Reviewer
 DevEye is an AI-driven code reviewer designed to help developers identify real, objective issues in their code without noise, nitpicks, or subjective suggestions.
 The project uses a HuggingFace AI model with custom prompting logic to enforce zero hallucinations, strict JSON output, and clear explanations for every detected issue.
 
