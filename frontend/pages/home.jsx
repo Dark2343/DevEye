@@ -35,14 +35,18 @@ export default function Home() {
             return
         }
 
-        setLoading(true)
-        const response = await api.post('/upload', {codeToReview: code})
+        try{
+            setModelOutput(null)
+            setLoading(true)
+            const response = await api.post('/upload', {codeToReview: code})
+            setModelOutput(response.data.modelOutput)
+        }
+        catch (e){
+            setModelOutput(e);
+        }
         setLoading(false)
-
-        setModelOutput(response.data.modelOutput)
     };
     
-    // TODO: Implement error handling
     return(
         <div className="flex flex-col w-full ">
             {/* NavBar */}

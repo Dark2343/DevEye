@@ -20,7 +20,7 @@ app.use(express.json())
 // Calls the API model to review the code
 async function callModel(code){
     // Specify the model's prompts and settings
-    // TODO: Improve the prompt and no problems output
+    // TODO: Improve the prompt
     const result = await client.chatCompletion({
             model: process.env.HF_MODEL,
             messages: [
@@ -34,7 +34,7 @@ async function callModel(code){
                         - Do NOT nitpick.
                         - Do NOT invent issues.
                         - Do NOT treat stylistic choices, preferences, or opinions as errors.
-                        - If the code is valid and behaves correctly, you MUST return the “no issues” response.
+                        - If the code is valid and behaves correctly, you MUST return the "no issues" response.
 
                         Output format:
                         Return ONLY a JSON array. No markdown, no code blocks, no explanations outside JSON.
@@ -68,7 +68,11 @@ async function callModel(code){
 
                         [
                             {
-                                "message": "No issues found. Code looks clean and well-written."
+                                "line": --,
+                                "issue": "No issues found. Code looks clean and well-written.",
+                                "severity": "Safe",
+                                "description": "---",
+                                "fix": "---"
                             }
                         ]
 
@@ -108,7 +112,13 @@ async function callModel(code){
         output = JSON.parse(output)
     } catch (err) {
         console.error("JSON Parse Error:", output)
-        throw new Error("Invalid model output")
+        output = [{
+            line: "--",
+            issue: "Problem while analyzing the code",
+            severity: "Error",
+            description: "Model output is unavailable.",
+            fix: "Try submitting the code again."
+        }]
     }
 
     return output;
