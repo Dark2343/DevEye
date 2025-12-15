@@ -53,11 +53,11 @@ async function callModel(code){
                         Each item MUST have exactly these keys:
                         - "line": number
                         - "issue": string
-                        - "severity": "Safe" | "Low" | "Medium" | "High"
+                        - "severity": "Low" | "Medium" | "High"
                         - "description": string
                         - "fix": string
 
-                        If there are ZERO real issues, return EXACTLY:
+                        ONLY If there are ZERO real issues, return EXACTLY:
 
                         [
                             {
