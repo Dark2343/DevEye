@@ -19,6 +19,7 @@ export default function Home() {
 
         if(file){
             const fileReader = new FileReader();
+            setModelOutput(null)
     
             fileReader.onload = (event) =>{
                 setCode(event.target.result)

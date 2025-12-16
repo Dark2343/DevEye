@@ -115,6 +115,10 @@ app.post('/upload', async (req, res) => {
     // req.body-- stores JSON into variable
     // req.body.code -- stores pure text into variable
     const code = req.body.codeToReview
+
+    // Number each line before sending it to the model,
+    // to accurately determine the line that causes the problem
+    code.split('\n').map((line, i) => `${i + 1}: ${line}`).join('\n')
     try{
         // Calling the model with the received code
         const review = await callModel(code)
